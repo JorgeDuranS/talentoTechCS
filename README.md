@@ -21,6 +21,13 @@ git clone https://github.com/JorgeDuranS/talentoTechCS.git
 cd talentoTechCS
 ```
 
+```bash
+python -m venv venv
+```
+
+```bash
+venv\Scripts\activate
+```
 3. Install the required dependencies:
 
 ```bash
