@@ -15,15 +15,13 @@ templates = Jinja2Templates(directory="frontend")
 def login_form(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
-@app.post("/login", response_class=HTMLResponse)
+@app.post("/welcome", response_class=HTMLResponse)
 def login(request: Request, username: str = Form(...), password: str = Form(...)):
     if username == "admin" and password == "'or 1=1":
-        return templates.TemplateResponse("hello.html", {"request": request})
+        return templates.TemplateResponse("welcome.html", {"request": request})
     return templates.TemplateResponse("index.html", {"request": request, "error": "Invalid credentials. Please try again."})
 
 if __name__ == "__main__":
-    if not os.path.exists("frontend"):
-        os.makedirs("frontend")
-    run("main:app", host="127.0.0.1", port=8000, reload=True)
+        run("main:app", host="127.0.0.1", port=8000, reload=True)
 
 
