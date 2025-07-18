@@ -26,7 +26,7 @@ cd talentoTechCS
 ```bash
 python -m venv venv
 ```
-
+Windows
 ```bash
 venv\Scripts\activate
 ```
@@ -35,7 +35,7 @@ Linux:
 source venv/bin/activate
 ```
 
-3. Install the required dependencies:
+4. Install the required dependencies:
 
 ```bash
 pip install -r requirements.txt
