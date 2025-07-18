@@ -21,7 +21,7 @@ git clone https://github.com/JorgeDuranS/talentoTechCS.git
 cd talentoTechCS
 ```
 
-3. (Opcional) Crea y activa un entorno virtual:
+3. Crea y activa un entorno virtual:
 
 ```bash
 python -m venv venv
