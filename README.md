@@ -52,7 +52,6 @@ This project is a basic web application built with FastAPI. It provides a login 
 - `frontend/`: Folder containing the HTML templates.
   - `index.html`: Main page with the login form.
   - `welcome.html`: Welcome page displayed after logging in.
-- `__pycache__/`: Automatically generated folder containing compiled Python files.
 
 ## Notes
 
