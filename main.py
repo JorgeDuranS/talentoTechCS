@@ -1,32 +1,29 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Form
 from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
+from fastapi.requests import Request
 from uvicorn import run
+import os
 
+# Create the FastAPI app
 app = FastAPI()
 
+# Set up Jinja2 templates
+templates = Jinja2Templates(directory="frontend")
+
 @app.get("/", response_class=HTMLResponse)
-def read_root():
-    return """
-    <!DOCTYPE html>
-    <html lang='en'>
-    <head>
-        <meta charset='UTF-8'>
-        <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-        <title>Hello World</title>
-        <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    </head>
-    <body class='bg-gray-100 flex items-center justify-center h-screen'>
-        <div class='bg-white p-8 rounded shadow text-center'>
-            <h1 class='text-4xl font-bold text-gray-800 mb-4'>Hello, World!</h1>
-            <p class='text-gray-600'>Bienvenido a tu app FastAPI.</p>
-        </div>
-    </body>
-    </html>
-    """
+def login_form(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
+
+@app.post("/login", response_class=HTMLResponse)
+def login(request: Request, username: str = Form(...), password: str = Form(...)):
+    if username == "admin" and password == "'or 1=1":
+        return templates.TemplateResponse("hello.html", {"request": request})
+    return templates.TemplateResponse("index.html", {"request": request, "error": "Invalid credentials. Please try again."})
 
 if __name__ == "__main__":
+    if not os.path.exists("frontend"):
+        os.makedirs("frontend")
     run("main:app", host="127.0.0.1", port=8000, reload=True)
 
 
-git config --global user.name "JorgeDuran"
-git config --global user.email "jdurans89@gmailcom"
