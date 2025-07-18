@@ -30,6 +30,11 @@ python -m venv venv
 ```bash
 venv\Scripts\activate
 ```
+Linux:
+```bash
+source venv/bin/activate
+```
+
 3. Install the required dependencies:
 
 ```bash
