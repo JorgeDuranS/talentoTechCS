@@ -1,20 +1,134 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <meta charset="UTF-8">
+  <title>Login con reCAPTCHA simulado</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    .spinner {
+        border: 3px solid #e5e7eb;
+        border-top: 3px solid #3b82f6;
+        border-radius: 50%;
+        width: 24px;
+        height: 24px;
+        animation: spin 1s linear infinite;        
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    .captcha-section {
+      padding: 1rem;
+      border: 2px solid #d1d5db;
+      border-radius: 0.5rem;
+      background-color: #f9fafb;
+      font-size: 1.1rem;
+    }
+    .captcha-section label {
+      font-weight: 600;
+    }
+  </style>
 </head>
 <body class="bg-gray-100 flex items-center justify-center h-screen">
-    <div class="bg-white p-8 rounded shadow text-center">
-        <h1 class="text-2xl font-bold text-gray-800 mb-2">Login</h1>
-        <p class="text-gray-600 text-sm mb-4">Jorge Durán</p>
-        <form action="/welcome" method="post">
-            <input type="text" name="username" placeholder="Username" class="border p-2 mb-4 w-full">
-            <input type="password" name="password" placeholder="Password" class="border p-2 mb-4 w-full">
-            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Login</button>
-        </form>
-    </div>
+  <div class="bg-white p-10 rounded shadow w-full max-w-md">
+    <h2 class="text-3xl font-bold text-center text-gray-800 mb-6">Login</h2>
+    <div id="errorMsg" class="mb-4 p-2 bg-red-100 text-red-700 rounded text-center font-semibold hidden"></div>
+    <form id="loginForm" autocomplete="off">
+      <input type="text" name="username" id="username" placeholder="Username" class="border p-3 mb-4 w-full rounded" required>
+      <input type="password" name="password" id="password" placeholder="Password" class="border p-3 mb-4 w-full rounded" required>
+
+      <!-- CAPTCHA simulado -->
+      <div class="captcha-section flex items-center justify-between mt-2 mb-6" id="captcha-section">
+        <div class="flex items-center">
+          <input type="checkbox" id="recaptcha" class="mr-3 w-5 h-5" disabled onchange="simularValidacion()">
+          <label for="recaptcha" class="text-gray-700">No soy un robot</label>
+        </div>
+        <div class="flex items-center ml-4">
+          <span id="spinner" class="spinner hidden"></span>
+          <span id="check" class="ml-2 hidden text-green-600 font-bold text-xl">✔</span>
+        </div>
+      </div>
+
+      <button type="submit" class="bg-blue-500 text-white w-full py-3 rounded hover:bg-blue-600 transition">
+        Login
+      </button>
+    </form>
+  </div>
+
+  <script>
+    let captchaVerificado = false;
+
+    function simularValidacion() {
+      const checkbox = document.getElementById("recaptcha");
+      const spinner = document.getElementById("spinner");
+      const check = document.getElementById("check");
+
+      if (checkbox.checked) {
+        checkbox.disabled = true;
+        spinner.classList.remove("hidden");
+        check.classList.add("hidden");
+
+        setTimeout(() => {
+          spinner.classList.add("hidden");
+          check.classList.remove("hidden");
+          captchaVerificado = true;
+        }, 1000);
+      } else {
+        captchaVerificado = false;
+        check.classList.add("hidden");
+      }
+    }
+
+    function validarCampos() {
+      const user = document.getElementById("username").value.trim();
+      const pass = document.getElementById("password").value.trim();
+      const recaptcha = document.getElementById("recaptcha");
+
+      if (user && pass && !captchaVerificado) {
+        recaptcha.disabled = false;
+      } else {
+        recaptcha.disabled = true;
+        recaptcha.checked = false;
+        document.getElementById("check").classList.add("hidden");
+        captchaVerificado = false;
+      }
+    }
+    document.getElementById("username").addEventListener("input", validarCampos);
+    document.getElementById("password").addEventListener("input", validarCampos);
+
+    window.onload = validarCampos;
+
+    document.getElementById("loginForm").addEventListener("submit", async function(e) {
+      e.preventDefault();
+      if (!captchaVerificado) {
+        mostrarError("Por favor, verifica que no eres un robot.");
+        return;
+      }
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+      const formData = new FormData();
+      formData.append("username", username);
+      formData.append("password", password);
+      try {
+        const response = await fetch("/api/login", {
+          method: "POST",
+          body: formData
+        });
+        const data = await response.json();
+        if (response.ok && data.success) {
+          window.location.href = "/welcome";
+        } else {
+          mostrarError(data.error || "Error desconocido");
+        }
+      } catch (err) {
+        mostrarError("Error de red o servidor");
+      }
+    });
+
+    function mostrarError(msg) {
+      const errorDiv = document.getElementById("errorMsg");
+      errorDiv.textContent = msg;
+      errorDiv.classList.remove("hidden");
+    }
+  </script>
 </body>
 </html>
