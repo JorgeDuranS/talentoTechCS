@@ -18,3 +18,4 @@ Thumbs.db
 
 # Archivos de entorno
 .env
+.gitignore
