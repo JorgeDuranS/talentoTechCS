@@ -2,12 +2,23 @@ from fastapi import FastAPI, Form, Request, status
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 
+
 import re
 import uvicorn
+from fastapi.middleware.cors import CORSMiddleware
 
 
 app = FastAPI()
 templates = Jinja2Templates(directory="frontend")
+
+# Habilitar CORS para todos los orígenes (desarrollo)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Diccionario de usuarios de ejemplo
 USERS = {    
