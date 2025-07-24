@@ -2,3 +2,6 @@ fastapi==0.116.1
 uvicorn==0.35.0
 python-multipart
 jinja2==3.1.2
+sqlalchemy==2.0.25
+pymysql==1.0.2
+passlib[bcrypt]==1.7.4
