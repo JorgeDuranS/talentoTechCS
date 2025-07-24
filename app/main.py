@@ -3,9 +3,9 @@ from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from app.models import Usuario
-from app.database import SessionLocal
-from app.crud import get_usuario_by_email, verificar_password, crear_usuario, actualizar_usuario, desactivar_usuario
+from .models import Usuario
+from .database import SessionLocal
+from .crud import get_usuario_by_email, verificar_password, crear_usuario, actualizar_usuario, desactivar_usuario
 
 
 import re

@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from passlib.hash import bcrypt
-from talentoTechCS.app.models import Usuario
+from .models import Usuario
 
 def get_usuario_by_email(db: Session, email: str):
     return db.query(Usuario).filter(Usuario.email == email).first()
