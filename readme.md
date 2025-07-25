@@ -72,6 +72,63 @@ pip install -r requirements.txt
 
 Make sure you have a MySQL server running and create a database:
 
+## 🛠️ Installing MariaDB and Setting Up the Database on Linux
+
+### 1. Install MariaDB
+
+On Debian/Ubuntu:
+
+```bash
+sudo apt update
+sudo apt install mariadb-server
+```
+
+Start the service and enable it to run on boot:
+
+```bash
+sudo systemctl start mariadb
+sudo systemctl enable mariadb
+```
+
+### 2. Secure MariaDB Installation (Optional but recommended)
+
+```bash
+sudo mysql_secure_installation
+```
+
+Follow the prompts to set a root password and secure your setup.
+
+### 3. Log into MariaDB
+
+```bash
+sudo mariadb -u root -p
+```
+
+### 4. Create a new database and user
+
+```sql
+CREATE DATABASE talentoTechCS;
+CREATE USER 'fastapi_user'@'localhost' IDENTIFIED BY 'kali';
+GRANT ALL PRIVILEGES ON talentoTechCS.* TO 'fastapi_user'@'localhost';
+FLUSH PRIVILEGES;
+```
+
+### 5. Create the `usuarios` table
+
+Based on the schema in `schemas.py`, the corresponding SQL for the table would be:
+
+```sql
+USE talentoTechCS;
+
+CREATE TABLE usuarios (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL
+);
+```
+
+This sets up a table that matches the structure defined in the `UsuarioLogin` schema, using `username` as an email and `password` as a plain string (note: it should be stored hashed).
+
 ```sql
 CREATE DATABASE talentotechcs;
 ```
@@ -141,62 +198,7 @@ Built with FastAPI, MySQL, TailwindCSS, and PokéAPI.
 
 ---
 
-## 🛠️ Installing MariaDB and Setting Up the Database on Linux
 
-### 1. Install MariaDB
-
-On Debian/Ubuntu:
-
-```bash
-sudo apt update
-sudo apt install mariadb-server
-```
-
-Start the service and enable it to run on boot:
-
-```bash
-sudo systemctl start mariadb
-sudo systemctl enable mariadb
-```
-
-### 2. Secure MariaDB Installation (Optional but recommended)
-
-```bash
-sudo mysql_secure_installation
-```
-
-Follow the prompts to set a root password and secure your setup.
-
-### 3. Log into MariaDB
-
-```bash
-sudo mariadb -u root -p
-```
-
-### 4. Create a new database and user
-
-```sql
-CREATE DATABASE talentoTechCS;
-CREATE USER 'fastapi_user'@'localhost' IDENTIFIED BY 'kali';
-GRANT ALL PRIVILEGES ON talentoTechCS.* TO 'fastapi_user'@'localhost';
-FLUSH PRIVILEGES;
-```
-
-### 5. Create the `usuarios` table
-
-Based on the schema in `schemas.py`, the corresponding SQL for the table would be:
-
-```sql
-USE talentoTechCS;
-
-CREATE TABLE usuarios (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    username VARCHAR(255) NOT NULL UNIQUE,
-    password VARCHAR(255) NOT NULL
-);
-```
-
-This sets up a table that matches the structure defined in the `UsuarioLogin` schema, using `username` as an email and `password` as a plain string (note: it should be stored hashed).
 
 
 ## 🧪 License
