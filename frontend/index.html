@@ -1,21 +1,36 @@
+<!--
+  File: index.html
+  Purpose: This is the login page of the app.
+  It uses HTML and Tailwind CSS to build a form where users can enter their email and password.
+  It also includes a fake CAPTCHA (a checkbox that simulates validation) before allowing login.
+-->
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
   <title>Login con reCAPTCHA simulado</title>
+
+  <!-- Load Tailwind CSS for styling -->
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
+  <!-- Custom CSS styles -->
   <style>
+    /* Spinner for fake CAPTCHA */
     .spinner {
         border: 3px solid #e5e7eb;
         border-top: 3px solid #3b82f6;
         border-radius: 50%;
         width: 24px;
         height: 24px;
-        animation: spin 1s linear infinite;        
+        animation: spin 1s linear infinite;
     }
+
     @keyframes spin {
       to { transform: rotate(360deg); }
     }
+
+    /* Style for CAPTCHA section */
     .captcha-section {
       padding: 1rem;
       border: 2px solid #d1d5db;
@@ -23,20 +38,29 @@
       background-color: #f9fafb;
       font-size: 1.1rem;
     }
+
     .captcha-section label {
       font-weight: 600;
     }
   </style>
 </head>
 <body class="bg-gray-100 flex items-center justify-center h-screen">
+  <!-- Login box container -->
   <div class="bg-white p-10 rounded shadow w-full max-w-md">
     <h2 class="text-3xl font-bold text-center text-gray-800 mb-6">Login</h2>
+
+    <!-- Area to show error messages -->
     <div id="errorMsg" class="mb-4 p-2 bg-red-100 text-red-700 rounded text-center font-semibold hidden"></div>
+
+    <!-- Login form -->
     <form id="loginForm" autocomplete="off">
+      <!-- Username input -->
       <input type="text" name="username" id="username" placeholder="Username" class="border p-3 mb-4 w-full rounded" required>
+
+      <!-- Password input -->
       <input type="password" name="password" id="password" placeholder="Password" class="border p-3 mb-4 w-full rounded" required>
 
-      <!-- CAPTCHA simulado -->
+      <!-- Simulated CAPTCHA section -->
       <div class="captcha-section flex items-center justify-between mt-2 mb-6" id="captcha-section">
         <div class="flex items-center">
           <input type="checkbox" id="recaptcha" class="mr-3 w-5 h-5" disabled onchange="simularValidacion()">
@@ -48,25 +72,30 @@
         </div>
       </div>
 
+      <!-- Submit button -->
       <button type="submit" class="bg-blue-500 text-white w-full py-3 rounded hover:bg-blue-600 transition">
         Login
       </button>
     </form>
   </div>
 
+  <!-- JavaScript section -->
   <script>
     let captchaVerificado = false;
 
+    // Simulate CAPTCHA validation after checking the box
     function simularValidacion() {
       const checkbox = document.getElementById("recaptcha");
       const spinner = document.getElementById("spinner");
       const check = document.getElementById("check");
 
       if (checkbox.checked) {
+        // Show spinner and disable checkbox temporarily
         checkbox.disabled = true;
         spinner.classList.remove("hidden");
         check.classList.add("hidden");
 
+        // Simulate delay like a real CAPTCHA check
         setTimeout(() => {
           spinner.classList.add("hidden");
           check.classList.remove("hidden");
@@ -78,6 +107,7 @@
       }
     }
 
+    // Enable CAPTCHA only when both fields are filled
     function validarCampos() {
       const user = document.getElementById("username").value.trim();
       const pass = document.getElementById("password").value.trim();
@@ -92,29 +122,40 @@
         captchaVerificado = false;
       }
     }
+
+    // Attach input listeners to username and password fields
     document.getElementById("username").addEventListener("input", validarCampos);
     document.getElementById("password").addEventListener("input", validarCampos);
 
+    // Initialize CAPTCHA state on page load
     window.onload = validarCampos;
 
+    // Handle login form submission
     document.getElementById("loginForm").addEventListener("submit", async function(e) {
       e.preventDefault();
+
       if (!captchaVerificado) {
         mostrarError("Por favor, verifica que no eres un robot.");
         return;
       }
+
       const username = document.getElementById("username").value;
       const password = document.getElementById("password").value;
       const formData = new FormData();
       formData.append("username", username);
       formData.append("password", password);
+
       try {
+        // Send login request to backend
         const response = await fetch("/api/login", {
           method: "POST",
           body: formData
         });
+
         const data = await response.json();
+
         if (response.ok && data.success) {
+          // If login is successful, redirect to welcome page
           window.location.href = "/welcome";
         } else {
           mostrarError(data.error || "Error desconocido");
@@ -124,6 +165,7 @@
       }
     });
 
+    // Show error message in red box
     function mostrarError(msg) {
       const errorDiv = document.getElementById("errorMsg");
       errorDiv.textContent = msg;

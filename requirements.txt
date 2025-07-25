@@ -1,7 +1,32 @@
+# ----------------------------------------------------------
+# File: requirements.txt
+# Purpose: Lists all external Python packages the project needs.
+# Use: Install them with the command -> pip install -r requirements.txt
+# ----------------------------------------------------------
+
 fastapi==0.116.1
+# FastAPI is a modern web framework for building APIs with Python.
+# It is fast, easy to use, and supports automatic validation.
+
 uvicorn==0.35.0
+# Uvicorn is an ASGI server used to run FastAPI applications.
+# Think of it as the tool that "serves" your app to the internet.
+
 python-multipart
+# Required for handling form data (e.g. in HTML forms).
+# It allows FastAPI to process file uploads and form submissions.
+
 jinja2==3.1.2
+# A templating engine used to generate HTML pages dynamically.
+# FastAPI uses it with the Jinja2Templates class to render templates like index.html.
+
 sqlalchemy==2.0.25
+# SQLAlchemy is the ORM (Object Relational Mapper) that helps connect Python with the database.
+# It allows you to define tables as Python classes and write queries using Python code.
+
 pymysql==1.0.2
+# A MySQL database driver. Required by SQLAlchemy to communicate with MySQL databases.
+
 passlib[bcrypt]==1.7.4
+# Passlib is a library for hashing and verifying passwords.
+# 'bcrypt' is a secure algorithm used to store passwords safely.

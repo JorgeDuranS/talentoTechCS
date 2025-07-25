@@ -1,0 +1,40 @@
+.gitignore# Entorno virtual
+venv/
+ENV/
+env/
+
+# Archivos de Python compilados
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Archivos temporales y de logs
+*.log
+*.tmp
+*.swp
+
+# Archivos de bases de datos locales (si aplican)
+*.sqlite3
+*.db
+
+# Configuración del sistema operativo
+.DS_Store
+Thumbs.db
+
+# Archivos de VS Code
+.vscode/
+
+# Archivos de entorno
+.env
+.env.*
+
+# Archivos del sistema
+.idea/
+*.bak
+
+# Archivos de salida
+dist/
+build/
+*.egg-info/
+
+
